@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
+const emailService = require("../services/email.service");
 
 async function register(req, res) {
   try {
@@ -36,6 +36,8 @@ async function register(req, res) {
         name: user.name,
       },
     });
+
+    await emailService.sendRegstrationEmail(user.email, user.name);
   } catch (error) {
     res.status(500).json({ message: error.message, status: "failed" });
   }
