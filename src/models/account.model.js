@@ -2,15 +2,19 @@ const mongoose = require("mongoose");
 
 const accountSchema = new mongoose.Schema(
   {
-    user: {
+    userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: [true, "Account must be associated with a user"],
+      unique: true,
       index: true,
     },
     status: {
-      enum: ["ACTIVE", "FROZEN", "CLOSED"],
-      message: "Status must be either ACTIVE, FROZEN, or CLOSED",
+      type: String,
+      enum: {
+        values: ["ACTIVE", "FROZEN", "CLOSED"],
+        message: "Status must be either ACTIVE, FROZEN, or CLOSED",
+      },
       default: "ACTIVE",
     },
     currency: {
@@ -24,7 +28,7 @@ const accountSchema = new mongoose.Schema(
   },
 );
 
-accountSchema.index({ user: 1, status: 1 });
+accountSchema.index({ userID: 1, status: 1 });
 
 const accountModel = mongoose.model("account", accountSchema);
 
