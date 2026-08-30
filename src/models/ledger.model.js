@@ -36,11 +36,14 @@ function preventLedgerModification(next) {
   throw new Error("Ledger entries are immutable and cannot be modified");
 }
 
-ledgerSchema.pre("updateOne", preventLedgerModification);
 ledgerSchema.pre("remove", preventLedgerModification);
 ledgerSchema.pre("findOneAndUpdate", preventLedgerModification);
 ledgerSchema.pre("deleteOne", preventLedgerModification);
 ledgerSchema.pre("deleteMany", preventLedgerModification);
+ledgerSchema.pre("findOneAndDelete", preventLedgerModification);
+ledgerSchema.pre("findOneAndRemove", preventLedgerModification);
+ledgerSchema.pre("updateMany", preventLedgerModification);
+ledgerSchema.pre("updateOne", preventLedgerModification);
 
 const ledgerModel = mongoose.model("ledger", ledgerSchema);
 
