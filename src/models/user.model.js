@@ -23,19 +23,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required for registration"],
       minlength: [6, "Password must be at least 6 characters long"],
-      select: false, // Exclude password from query results by default
+      select: false,
     },
   },
   { timestamps: true },
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 userSchema.methods.comparePassword = async function (password) {
@@ -43,3 +39,5 @@ userSchema.methods.comparePassword = async function (password) {
 };
 
 const userModel = mongoose.model("user", userSchema);
+
+module.exports = userModel;
